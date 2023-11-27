@@ -1,70 +1,7 @@
 jenkins:
-  agentProtocols:
-  - "JNLP4-connect"
-  - "Ping"
   authorizationStrategy:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
-  clouds:
-  - kubernetes:
-      containerCap: 10
-      containerCapStr: "10"
-      jenkinsTunnel: "cd-jenkins-agent:50000"
-      jenkinsUrl: "http://cd-jenkins:8080"
-      name: "kubernetes"
-      namespace: "devops-tools"
-      podLabels:
-      - key: "jenkins/cd-jenkins-jenkins-agent"
-        value: "true"
-      serverUrl: "https://kubernetes.default"
-      templates:
-      - containers:
-        - args: "^${computer.jnlpmac} ^${computer.name}"
-          envVars:
-          - envVar:
-              key: "JENKINS_URL"n
-              value: "http://cd-jenkins:8080"
-          image: "jenkins/inbound-agent:3107.v665000b_51092-15"
-          name: "jnlp"
-          resourceLimitCpu: "1"
-          resourceLimitMemory: "512Mi"
-          resourceRequestCpu: "500m"
-          resourceRequestMemory: "256Mi"
-          workingDir: "/home/jenkins/agent"
-        id: "d9b4da264d50fa4bfb5cd89457994ac728c7727147a254d2e812e7e7404b1994"
-        label: "cd-jenkins-jenkins-agent"
-        name: "default"
-        namespace: "devops-tools"
-        nodeUsageMode: NORMAL
-        podRetention: "never"
-        serviceAccount: "default"
-        slaveConnectTimeout: 100
-        slaveConnectTimeoutStr: "100"
-        yamlMergeStrategy: "override"
-  crumbIssuer:
-    standard:
-      excludeClientIPFromCrumb: true
-  disableRememberMe: false
-  labelAtoms:
-  - name: "built-in"
-  - name: "cd-jenkins-jenkins-agent"
-  markupFormatter: "plainText"
-  mode: NORMAL
-  myViewsTabBar: "standard"
-  nodeMonitors:
-  - diskSpaceMonitor:
-      freeSpaceThreshold: "1GB"
-  - tmpSpace:
-      freeSpaceThreshold: "1GB"
-  numExecutors: 0
-  primaryView:
-    all:
-      name: "all"
-  projectNamingStrategy: "standard"
-  quietPeriod: 5
-  remotingSecurity:
-    enabled: true
-  scmCheckoutRetryCount: 0
   securityRealm:
     saml:
       binding: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
@@ -78,76 +15,71 @@ jenkins:
       maximumAuthenticationLifetime: 86400
       usernameAttributeName: "NameID"
       usernameCaseConversion: "none"
-  slaveAgentPort: 50000
-  updateCenter:
-    sites:
-    - id: "default"
-      url: "https://updates.jenkins.io/update-center.json"
-  views:
-  - all:
-      name: "all"
-  viewsTabBar: "standard"
-globalCredentialsConfiguration:
-  configuration:
-    providerFilter: "none"
-    typeFilter: "none"
-appearance:
-  prism:
-    theme: PRISM
+  disableRememberMe: false
+  mode: NORMAL
+  numExecutors: 0
+  labelString: ""
+  projectNamingStrategy: "standard"
+  markupFormatter:
+    plainText
+  clouds:
+  - kubernetes:
+      containerCapStr: "10"
+      defaultsProviderTemplate: ""
+      connectTimeout: "5"
+      readTimeout: "15"
+      jenkinsUrl: "http://cd-jenkins:8080"
+      jenkinsTunnel: "cd-jenkins-agent:50000"
+      maxRequestsPerHostStr: "32"
+      retentionTimeout: "5"
+      waitForPodSec: "600"
+      name: "kubernetes"
+      namespace: "devops-tools"
+      serverUrl: "https://kubernetes.default"
+      podLabels:
+      - key: "jenkins/cd-jenkins-jenkins-agent"
+        value: "true"
+      templates:
+        - name: "default"
+          namespace: "devops-tools"
+          id: d9b4da264d50fa4bfb5cd89457994ac728c7727147a254d2e812e7e7404b1994
+          containers:
+          - name: "jnlp"
+            alwaysPullImage: false
+            args: "^${computer.jnlpmac} ^${computer.name}"
+            command: 
+            envVars:
+              - envVar:
+                  key: "JENKINS_URL"
+                  value: http://cd-jenkins:8080
+            image: "jenkins/inbound-agent:3107.v665000b_51092-15"
+            privileged: "false"
+            resourceLimitCpu: 1
+            resourceLimitMemory: 512Mi
+            resourceRequestCpu: 500m
+            resourceRequestMemory: 256Mi
+            runAsUser: 
+            runAsGroup: 
+            ttyEnabled: false
+            workingDir: /home/jenkins/agent
+          idleMinutes: 0
+          instanceCap: 2147483647
+          label: "cd-jenkins-jenkins-agent "
+          nodeUsageMode: "NORMAL"
+          podRetention: Never
+          showRawYaml: true
+          serviceAccount: "default"
+          slaveConnectTimeoutStr: "100"
+          yamlMergeStrategy: override
+  crumbIssuer:
+    standard:
+      excludeClientIPFromCrumb: true
 security:
   apiToken:
     creationOfLegacyTokenEnabled: false
     tokenGenerationOnCreationEnabled: false
     usageStatisticsEnabled: true
-  gitHooks:
-    allowedOnAgents: false
-    allowedOnController: false
-  gitHostKeyVerificationConfiguration:
-    sshHostKeyVerificationStrategy: "knownHostsFileVerificationStrategy"
-  sSHD:
-    port: -1
 unclassified:
-  bitbucketEndpointConfiguration:
-    endpoints:
-    - bitbucketCloudEndpoint:
-        enableCache: false
-        manageHooks: false
-        repositoriesCacheDuration: 0
-        teamCacheDuration: 0
-  buildDiscarders:
-    configuredBuildDiscarders:
-    - "jobBuildDiscarder"
-  fingerprints:
-    fingerprintCleanupDisabled: false
-    storage: "file"
-  gitHubConfiguration:
-    apiRateLimitChecker: ThrottleForNormalize
-  gitHubPluginConfig:
-    hookUrl: "https://jenkins.c-b4.com/github-webhook/"
-  junitTestResultStorage:
-    storage: "file"
   location:
-    adminAddress: "address not configured yet <nobody@nowhere>"
-    url: "https://jenkins.c-b4.com/"
-  mailer:
-    charset: "UTF-8"
-    useSsl: false
-    useTls: false
-  pollSCM:
-    pollingThreadCount: 10
-  scmGit:
-    addGitTagAction: false
-    allowSecondFetch: false
-    createAccountBasedOnEmail: false
-    disableGitToolChooser: false
-    hideCredentials: false
-    showEntireCommitSummaryInChanges: false
-    useExistingAccountWithSameEmail: false
-tool:
-  git:
-    installations:
-    - home: "git"
-      name: "Default"
-  mavenGlobalConfig:
-    globalSettingsProvider: "standard"
-    settingsProvider: "standard"
+    adminAddress: 
+    url: https://jenkins.c-b4.com
